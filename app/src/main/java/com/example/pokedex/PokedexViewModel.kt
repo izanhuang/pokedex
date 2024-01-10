@@ -43,6 +43,16 @@ class PokedexViewModel() : ViewModel() {
         }
     }
 
+    fun getGenerationDisplayName(name: String?): String? {
+        if (name != null) {
+            val nameParts = name.split("-")
+
+            return "${nameParts[0].replaceFirstChar { char -> char.uppercase() }} ${nameParts[1].uppercase()}"
+        }
+
+        return null
+    }
+
     private fun getGenerations() {
         viewModelScope.launch(Dispatchers.IO) {
             toggleIsLoading(true)
@@ -71,6 +81,7 @@ class PokedexViewModel() : ViewModel() {
                         generation = _pokedex.value.generation.copy(
                             id = response.id,
                             name = response.name,
+                            displayName = getGenerationDisplayName(response.name)
                         )
                     )
                 }

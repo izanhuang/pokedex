@@ -4,9 +4,10 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 data class Generation(
-    val id: Int?,
-    val name: String?,
-    val pokemonSpecies: List<NameAndUrl>?
+    val id: Int? = null,
+    val name: String? = null,
+    val displayName: String? = null,
+    val pokemonSpecies: List<NameAndUrl>? = null
 )
 
 data class GenerationFromNetwork(

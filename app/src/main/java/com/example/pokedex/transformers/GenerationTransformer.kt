@@ -8,7 +8,7 @@ class GenerationTransformer {
     fun transformGenerationFromNetworkToGeneration(
         generationFromNetwork: GenerationFromNetwork?
     ): Generation? {
-        if (generationFromNetwork != null ){
+        if (generationFromNetwork != null) {
             return Generation(
                 id = generationFromNetwork.id,
                 name = generationFromNetwork.name,
