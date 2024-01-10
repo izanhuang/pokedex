@@ -5,9 +5,7 @@ import androidx.compose.runtime.Immutable
 @Immutable
 data class PokedexScreenState(
     val isLoading: Boolean = false,
-    val generationCount: Int = 0,
-    val generations: List<NameAndUrl> = emptyList(),
-    val currentGeneration: String = "",
-    val pokemonList: List<PokemonViewData> = emptyList(),
+    val generation: GenerationViewData = GenerationViewData(),
+    val pokemonList: List<Pokemon> = emptyList(),
     val selectedPokemonDetails: PokemonDetailsViewData? = null
 )

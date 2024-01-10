@@ -51,8 +51,6 @@ android {
 }
 
 dependencies {
-    implementation("com.github.PokeAPI:pokekotlin:2.3.1")
-
     implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
 
     // support libraries

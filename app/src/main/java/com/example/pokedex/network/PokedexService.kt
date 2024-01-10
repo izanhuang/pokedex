@@ -1,7 +1,8 @@
 package com.example.pokedex.network
 
-import com.example.pokedex.types.GenerationResourceSummaryList
-import me.sargunvohra.lib.pokekotlin.model.Pokemon
+import com.example.pokedex.types.GenerationFromNetwork
+import com.example.pokedex.types.GenerationList
+import com.example.pokedex.types.PokemonFromNetwork
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -11,8 +12,11 @@ import retrofit2.http.Path
  */
 interface PokedexService {
     @GET("generation")
-    suspend fun getGenerationList(): Response<GenerationResourceSummaryList>
+    suspend fun getGenerationList(): Response<GenerationList>
 
-    @GET("pokemon/{id}")
-    suspend fun getPokemon(@Path("id") id: Int): Response<Pokemon>
+    @GET("generation/{id}")
+    suspend fun getGeneration(@Path("id") id: Int): Response<GenerationFromNetwork>
+
+    @GET("pokemon/{name}")
+    suspend fun getPokemon(@Path("name") name: String): Response<PokemonFromNetwork>
 }

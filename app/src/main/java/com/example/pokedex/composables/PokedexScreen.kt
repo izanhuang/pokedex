@@ -1,6 +1,7 @@
 package com.example.pokedex.composables
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -14,10 +15,18 @@ fun PokedexScreen(modifier: Modifier = Modifier, viewModel: PokedexViewModel = v
     val pokedex by viewModel.pokedex.collectAsState()
 
     Column(modifier = modifier) {
+        if (pokedex.generation.id == null) {
+            pokedex.generation.generations.forEachIndexed { index, generation ->
+                Button(onClick = { viewModel.getGeneration(index + 1) }) {
+                    Text(generation.name)
+                }
+            }
+        }
+        if (pokedex.generation.id != null) {
+            Text(pokedex.pokemonList.toString())
+        }
         if (pokedex.isLoading) {
             Text("loading")
-        } else {
-            Text("${pokedex.generations}")
         }
     }
 }
