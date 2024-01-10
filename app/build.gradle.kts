@@ -51,15 +51,19 @@ android {
 }
 
 dependencies {
+    // Image loading
+    implementation("io.coil-kt:coil-compose:2.5.0")
+
+    // Live data
     implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
 
-    // support libraries
+    // Support libraries
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("com.google.android.material:material:1.11.0")
 
     // coroutines for getting off the UI thread
-    val coroutines = "1.7.1"
+    val coroutines = "1.7.3"
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines")
 

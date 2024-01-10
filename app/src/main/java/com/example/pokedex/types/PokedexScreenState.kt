@@ -7,5 +7,4 @@ data class PokedexScreenState(
     val isLoading: Boolean = false,
     val generation: GenerationViewData = GenerationViewData(),
     val pokemonList: List<Pokemon> = emptyList(),
-    val selectedPokemonDetails: PokemonDetailsViewData? = null
 )

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.pokedex.repository.PokedexRepository
 import com.example.pokedex.types.NameAndUrl
 import com.example.pokedex.types.PokedexScreenState
+import com.example.pokedex.types.Pokemon
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,7 +35,7 @@ class PokedexViewModel() : ViewModel() {
         getGenerations()
     }
 
-    private suspend fun toggleIsLoading(isLoading: Boolean) {
+    private fun toggleIsLoading(isLoading: Boolean) {
         _pokedex.update {
             _pokedex.value.copy(
                 isLoading = isLoading,
@@ -73,6 +74,7 @@ class PokedexViewModel() : ViewModel() {
                         )
                     )
                 }
+                // NOTE: Must make additional call to get each pokemon's sprites/images url
                 if (response.pokemonSpecies != null) {
                     getAllPokemon(response.pokemonSpecies)
                 }
@@ -82,15 +84,19 @@ class PokedexViewModel() : ViewModel() {
     }
 
     private suspend fun getAllPokemon(pokemonSpecies: List<NameAndUrl>) {
+        var newPokemonList = emptyList<Pokemon>()
         for (pokemon in pokemonSpecies) {
             val pokemon = repository.getPokemon(pokemon.name)
             if (pokemon != null) {
-                _pokedex.update {
-                    _pokedex.value.copy(
-                        pokemonList = _pokedex.value.pokemonList.plus(pokemon)
-                    )
-                }
+                newPokemonList = newPokemonList.plus(pokemon)
             }
+        }
+
+        val orderedPokemonList = newPokemonList.sortedBy { pokemon -> pokemon.id }
+        _pokedex.update {
+            _pokedex.value.copy(
+                pokemonList = orderedPokemonList
+            )
         }
     }
 

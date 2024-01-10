@@ -6,6 +6,7 @@ import androidx.compose.runtime.Immutable
 data class Pokemon(
     val id: Int?,
     val name: String?,
+    val displayName: String?,
     val baseExperience: Int?,
     val height: Int?,
     val weight: Int?,

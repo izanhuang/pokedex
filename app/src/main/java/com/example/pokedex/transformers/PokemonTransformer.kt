@@ -20,9 +20,12 @@ class PokemonTransformer {
         pokemonFromNetwork: PokemonFromNetwork?
     ): Pokemon? {
         if (pokemonFromNetwork != null) {
+            val displayName = pokemonFromNetwork.name?.replaceFirstChar { char -> char.uppercase()  }
+
             return Pokemon(
                 id = pokemonFromNetwork.id,
                 name = pokemonFromNetwork.name,
+                displayName = displayName,
                 baseExperience = pokemonFromNetwork.base_experience,
                 height = pokemonFromNetwork.height,
                 weight = pokemonFromNetwork.weight,
