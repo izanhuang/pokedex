@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pokedex.prefdatastore.DataStoreManager
 import com.example.pokedex.repository.PokedexRepository
+import com.example.pokedex.types.Generation
 import com.example.pokedex.types.NameAndUrl
 import com.example.pokedex.types.PokedexDetail
 import com.example.pokedex.types.PokedexScreenState
@@ -18,7 +19,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PokedexViewModel @Inject constructor(
-    val dataStoreManager: DataStoreManager
+    private val dataStoreManager: DataStoreManager
 ) : ViewModel() {
     private val repository = PokedexRepository()
 
@@ -39,7 +40,7 @@ class PokedexViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             dataStoreManager.getFromDataStore().collect { pokedexDetail ->
                 if (pokedexDetail.generationId.isNotEmpty()) {
-                    getGeneration(pokedexDetail.generationId.toInt())
+                    getAllPokemonFromGeneration(pokedexDetail.generationId.toInt())
                 } else {
                     getGenerations()
                 }
@@ -68,13 +69,12 @@ class PokedexViewModel @Inject constructor(
     private fun getGenerations() {
         viewModelScope.launch(Dispatchers.IO) {
             toggleIsLoading(true)
-            val response = repository.getGenerationList()
+            val response = repository.getAllGenerations()
             if (response != null) {
                 _pokedex.update {
                     _pokedex.value.copy(
-                        generation = _pokedex.value.generation.copy(
-                            totalCount = response.count,
-                            generations = response.results
+                        generationDetails = _pokedex.value.generationDetails.copy(
+                            allGenerations = response.results
                         )
                     )
                 }
@@ -83,30 +83,38 @@ class PokedexViewModel @Inject constructor(
         }
     }
 
-    fun getGeneration(generationId: Int) {
+    fun getAllPokemonFromGeneration(generationId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            dataStoreManager.saveToDataStore(
-                PokedexDetail(generationId = generationId.toString())
-            )
             toggleIsLoading(true)
-            val response = repository.getGeneration(generationId)
-            if (response != null) {
-                _pokedex.update {
-                    _pokedex.value.copy(
-                        generation = _pokedex.value.generation.copy(
-                            id = response.id,
-                            name = response.name,
-                            displayName = getGenerationDisplayName(response.name)
-                        )
-                    )
-                }
+            val getGenerationResponse = getGeneration(generationId)
+            if (getGenerationResponse != null) {
                 // NOTE: Must make additional call to get each pokemon's sprites/images url
-                if (response.pokemonSpecies != null) {
-                    getAllPokemon(response.pokemonSpecies)
+                if (getGenerationResponse.pokemonSpecies != null) {
+                    getAllPokemon(getGenerationResponse.pokemonSpecies)
                 }
             }
             toggleIsLoading(false)
         }
+    }
+
+    private suspend fun getGeneration(generationId: Int): Generation? {
+        dataStoreManager.saveToDataStore(
+            PokedexDetail(generationId = generationId.toString())
+        )
+        val response = repository.getGeneration(generationId)
+        if (response != null) {
+            _pokedex.update {
+                _pokedex.value.copy(
+                    generationDetails = _pokedex.value.generationDetails.copy(
+                        currentGenerationId = response.id,
+                        currentGenerationName = response.name,
+                        currentGenerationDisplayName = getGenerationDisplayName(response.name)
+                    )
+                )
+            }
+        }
+
+        return response
     }
 
     private suspend fun getAllPokemon(pokemonSpecies: List<NameAndUrl>) {

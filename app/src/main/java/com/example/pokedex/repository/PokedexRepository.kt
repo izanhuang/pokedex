@@ -13,8 +13,8 @@ import com.example.pokedex.types.Pokemon
 class PokedexRepository() {
     private val pokedexService = RetrofitInstance.pokedexService
 
-    suspend fun getGenerationList(): GenerationList? {
-        return pokedexService.getGenerationList().body()
+    suspend fun getAllGenerations(): GenerationList? {
+        return pokedexService.getAllGenerations().body()
     }
 
     suspend fun getGeneration(id: Int): Generation? {

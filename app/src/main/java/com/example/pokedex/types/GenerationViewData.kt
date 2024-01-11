@@ -4,9 +4,8 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 data class GenerationViewData(
-    val id: Int? = null,
-    val name: String? = null,
-    val displayName: String? = null,
-    val generations: List<NameAndUrl> = emptyList(),
-    val totalCount: Int = 0,
+    val currentGenerationId: Int? = null,
+    val currentGenerationName: String? = null,
+    val currentGenerationDisplayName: String? = null,
+    val allGenerations: List<NameAndUrl> = emptyList(),
 )

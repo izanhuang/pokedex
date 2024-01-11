@@ -30,11 +30,11 @@ fun PokedexScreen(modifier: Modifier = Modifier, viewModel: PokedexViewModel = v
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        if (pokedex.generation.id == null) {
+        if (pokedex.generationDetails.currentGenerationId == null) {
             Column {
-                pokedex.generation.generations.forEachIndexed { index, generation ->
+                pokedex.generationDetails.allGenerations.forEachIndexed { index, generation ->
                     viewModel.getGenerationDisplayName(generation.name)?.let {
-                        Button(onClick = { viewModel.getGeneration(index + 1) }) {
+                        Button(onClick = { viewModel.getAllPokemonFromGeneration(index + 1) }) {
                             Text(it)
                         }
                     }
@@ -43,7 +43,7 @@ fun PokedexScreen(modifier: Modifier = Modifier, viewModel: PokedexViewModel = v
         }
         if (!pokedex.isLoading && pokedex.pokemonList.isNotEmpty()) {
             Column {
-                pokedex.generation.displayName?.let {
+                pokedex.generationDetails.currentGenerationDisplayName?.let {
                     Text(
                         text = it,
                         style = MaterialTheme.typography.titleMedium
