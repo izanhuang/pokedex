@@ -12,8 +12,6 @@ import com.example.pokedex.ui.theme.PokedexTheme
 import javax.inject.Inject
 
 class MainActivity : ComponentActivity() {
-//    val dataStoreManager: DataStoreManager = DataStoreManager(application.applicationContext)
-//    private val viewModel: PokedexViewModel by viewModels { PokedexViewModelFactory(dataStoreManager) }
     @Inject
     lateinit var pokedexViewModel: PokedexViewModel
 
