@@ -9,9 +9,16 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.pokedex.composables.PokedexScreen
 import com.example.pokedex.ui.theme.PokedexTheme
+import javax.inject.Inject
 
 class MainActivity : ComponentActivity() {
+//    val dataStoreManager: DataStoreManager = DataStoreManager(application.applicationContext)
+//    private val viewModel: PokedexViewModel by viewModels { PokedexViewModelFactory(dataStoreManager) }
+    @Inject
+    lateinit var pokedexViewModel: PokedexViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        (application as MyApplication).appComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContent {
             PokedexTheme {
@@ -20,7 +27,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    PokedexScreen()
+                    PokedexScreen(viewModel = pokedexViewModel)
                 }
             }
         }

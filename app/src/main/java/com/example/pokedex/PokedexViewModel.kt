@@ -4,8 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pokedex.prefdatastore.DataStoreManager
 import com.example.pokedex.repository.PokedexRepository
 import com.example.pokedex.types.NameAndUrl
+import com.example.pokedex.types.PokedexDetail
 import com.example.pokedex.types.PokedexScreenState
 import com.example.pokedex.types.Pokemon
 import kotlinx.coroutines.Dispatchers
@@ -13,8 +15,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class PokedexViewModel() : ViewModel() {
+class PokedexViewModel @Inject constructor(
+    val dataStoreManager: DataStoreManager
+) : ViewModel() {
     private val repository = PokedexRepository()
 
     private val _pokedex = MutableStateFlow<PokedexScreenState>(
@@ -24,7 +29,6 @@ class PokedexViewModel() : ViewModel() {
     )
     val pokedex: StateFlow<PokedexScreenState> = _pokedex
 
-
     private var _eventNetworkError = MutableLiveData<Boolean>(false)
     val eventNetworkError: LiveData<Boolean> = _eventNetworkError
 
@@ -32,7 +36,15 @@ class PokedexViewModel() : ViewModel() {
     val isNetworkErrorShown: LiveData<Boolean> = _isNetworkErrorShown
 
     init {
-        getGenerations()
+        viewModelScope.launch(Dispatchers.IO) {
+            dataStoreManager.getFromDataStore().collect { pokedexDetail ->
+                if (pokedexDetail.generationId.isNotEmpty()) {
+                    getGeneration(pokedexDetail.generationId.toInt())
+                } else {
+                    getGenerations()
+                }
+            }
+        }
     }
 
     private fun toggleIsLoading(isLoading: Boolean) {
@@ -73,6 +85,9 @@ class PokedexViewModel() : ViewModel() {
 
     fun getGeneration(generationId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
+            dataStoreManager.saveToDataStore(
+                PokedexDetail(generationId = generationId.toString())
+            )
             toggleIsLoading(true)
             val response = repository.getGeneration(generationId)
             if (response != null) {
@@ -122,3 +137,13 @@ class PokedexViewModel() : ViewModel() {
 //        }
 //    }
 }
+
+//class PokedexViewModelFactory(private val dataStoreManager: DataStoreManager) : ViewModelProvider.Factory {
+//    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//        if (modelClass.isAssignableFrom(PokedexViewModel::class.java)) {
+//            @Suppress("UNCHECKED_CAST")
+//            return PokedexViewModel(dataStoreManager) as T
+//        }
+//        throw IllegalArgumentException("Unable to construct viewmodel")
+//    }
+//}

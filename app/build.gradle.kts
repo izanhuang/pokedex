@@ -51,6 +51,13 @@ android {
 }
 
 dependencies {
+    // Dependency injection
+    implementation("com.google.dagger:dagger:2.50")
+    kapt("com.google.dagger:dagger-compiler:2.50")
+
+    // Preferences Datastore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
     // Image loading
     implementation("io.coil-kt:coil-compose:2.5.0")
 
