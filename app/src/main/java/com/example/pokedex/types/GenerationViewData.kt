@@ -7,5 +7,5 @@ data class GenerationViewData(
     val currentGenerationId: Int? = null,
     val currentGenerationName: String? = null,
     val currentGenerationDisplayName: String? = null,
-    val allGenerations: List<NameAndUrl> = emptyList(),
+    val allGenerations: List<String> = emptyList(),
 )

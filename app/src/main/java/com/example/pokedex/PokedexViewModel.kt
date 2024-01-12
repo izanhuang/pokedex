@@ -56,14 +56,10 @@ class PokedexViewModel @Inject constructor(
         }
     }
 
-    fun getGenerationDisplayName(name: String?): String? {
-        if (name != null) {
-            val nameParts = name.split("-")
+    private fun getGenerationDisplayName(name: String): String {
+        val nameParts = name.split("-")
 
-            return "${nameParts[0].replaceFirstChar { char -> char.uppercase() }} ${nameParts[1].uppercase()}"
-        }
-
-        return null
+        return "${nameParts[0].replaceFirstChar { char -> char.uppercase() }} ${nameParts[1].uppercase()}"
     }
 
     private fun getGenerations() {
@@ -71,10 +67,11 @@ class PokedexViewModel @Inject constructor(
             toggleIsLoading(true)
             val response = repository.getAllGenerations()
             if (response != null) {
+                val generationNamesList = response.results.map { getGenerationDisplayName(it.name)}
                 _pokedex.update {
                     _pokedex.value.copy(
                         generationDetails = _pokedex.value.generationDetails.copy(
-                            allGenerations = response.results
+                            allGenerations = generationNamesList
                         )
                     )
                 }

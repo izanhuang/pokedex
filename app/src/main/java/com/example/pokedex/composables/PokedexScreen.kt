@@ -1,14 +1,9 @@
 package com.example.pokedex.composables
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,15 +26,10 @@ fun PokedexScreen(modifier: Modifier = Modifier, viewModel: PokedexViewModel = v
             .padding(16.dp)
     ) {
         if (pokedex.generationDetails.currentGenerationId == null) {
-            Column {
-                pokedex.generationDetails.allGenerations.forEachIndexed { index, generation ->
-                    viewModel.getGenerationDisplayName(generation.name)?.let {
-                        Button(onClick = { viewModel.getAllPokemonFromGeneration(index + 1) }) {
-                            Text(it)
-                        }
-                    }
-                }
-            }
+            SetupScreen(
+                allGenerations = pokedex.generationDetails.allGenerations,
+                onGenerationSelect = { generationId -> viewModel.getAllPokemonFromGeneration(generationId) }
+            )
         }
         if (!pokedex.isLoading && pokedex.pokemonList.isNotEmpty()) {
             Column {
@@ -49,15 +39,7 @@ fun PokedexScreen(modifier: Modifier = Modifier, viewModel: PokedexViewModel = v
                         style = MaterialTheme.typography.titleMedium
                     )
                 }
-                LazyVerticalGrid(
-                    columns = GridCells.Adaptive(minSize = 128.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    items(pokedex.pokemonList) { pokemon ->
-                        PokemonCard(pokemon = pokemon)
-                    }
-                }
+                HomeScreen(pokemonList = pokedex.pokemonList)
             }
         }
         if (pokedex.isLoading) {
