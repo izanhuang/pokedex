@@ -79,6 +79,9 @@ class PokedexViewModel @Inject constructor(
     fun getPokemonListFromGeneration(generationId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             toggleIsLoading(true)
+            dataStoreManager.saveToDataStore(
+                PokedexDetail(generationId = generationId.toString())
+            )
             val generationDetails = getGenerationDetails(generationId)
             if (generationDetails != null) {
                 // NOTE: Must make additional call to get each pokemon's sprites/images url
@@ -91,9 +94,6 @@ class PokedexViewModel @Inject constructor(
     }
 
     private suspend fun getGenerationDetails(generationId: Int): Generation? {
-        dataStoreManager.saveToDataStore(
-            PokedexDetail(generationId = generationId.toString())
-        )
         val response = repository.getGeneration(generationId)
         if (response != null) {
             _pokedex.update {

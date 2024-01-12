@@ -27,20 +27,6 @@ fun PokemonCard(
     pokemon: BasicPokemon,
     modifier: Modifier = Modifier
 ) {
-    val MAX_POKEMON_ID_LENGTH = 4
-
-    var pokemonIdAsString = pokemon.id.toString()
-    val displayPokemonId = if (pokemonIdAsString.length < MAX_POKEMON_ID_LENGTH) {
-        val lengthDifference = MAX_POKEMON_ID_LENGTH - pokemonIdAsString.length
-        for (i in 0 until lengthDifference) {
-            pokemonIdAsString = "0" + pokemonIdAsString
-        }
-
-        "NO. $pokemonIdAsString"
-    } else {
-        "NO. $pokemonIdAsString"
-    }
-
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
@@ -59,7 +45,7 @@ fun PokemonCard(
                 ),
         ) {
             Text(
-                text = displayPokemonId,
+                text = "NO. ${pokemon.id.toString()}",
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
                 style = MaterialTheme.typography.labelLarge,
