@@ -4,13 +4,21 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 data class Pokemon(
-    val id: Int?,
-    val name: String?,
-    val displayName: String?,
-    val baseExperience: Int?,
-    val height: Int?,
-    val weight: Int?,
-    val sprites: PokemonSprites?
+    val id: Int? = null,
+    val name: String? = null,
+    val displayName: String? = null,
+    val baseExperience: Int? = null,
+    val height: Int? = null,
+    val weight: Int? = null,
+    val sprites: PokemonSprites? = null
+)
+
+@Immutable
+data class BasicPokemon(
+    val id: Int? = null,
+    val name: String? = null,
+    val displayName: String? = null,
+    val sprites: PokemonSprites? = null
 )
 
 @Immutable

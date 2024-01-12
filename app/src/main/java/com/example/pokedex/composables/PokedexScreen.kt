@@ -28,7 +28,7 @@ fun PokedexScreen(modifier: Modifier = Modifier, viewModel: PokedexViewModel = v
         if (pokedex.generationDetails.currentGenerationId == null) {
             SetupScreen(
                 allGenerations = pokedex.generationDetails.allGenerations,
-                onGenerationSelect = { generationId -> viewModel.getAllPokemonFromGeneration(generationId) }
+                onGenerationSelect = { generationId -> viewModel.getPokemonListFromGeneration(generationId) }
             )
         }
         if (!pokedex.isLoading && pokedex.pokemonList.isNotEmpty()) {

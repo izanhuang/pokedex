@@ -19,12 +19,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.pokedex.R
-import com.example.pokedex.types.Pokemon
+import com.example.pokedex.types.BasicPokemon
 import com.example.pokedex.ui.theme.LightGreen
 
 @Composable
 fun PokemonCard(
-    pokemon: Pokemon,
+    pokemon: BasicPokemon,
     modifier: Modifier = Modifier
 ) {
     val MAX_POKEMON_ID_LENGTH = 4

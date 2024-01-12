@@ -6,11 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pokedex.prefdatastore.DataStoreManager
 import com.example.pokedex.repository.PokedexRepository
+import com.example.pokedex.types.BasicPokemon
 import com.example.pokedex.types.Generation
 import com.example.pokedex.types.NameAndUrl
 import com.example.pokedex.types.PokedexDetail
 import com.example.pokedex.types.PokedexScreenState
-import com.example.pokedex.types.Pokemon
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -40,7 +40,7 @@ class PokedexViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             dataStoreManager.getFromDataStore().collect { pokedexDetail ->
                 if (pokedexDetail.generationId.isNotEmpty()) {
-                    getAllPokemonFromGeneration(pokedexDetail.generationId.toInt())
+                    getPokemonListFromGeneration(pokedexDetail.generationId.toInt())
                 } else {
                     getGenerations()
                 }
@@ -62,39 +62,35 @@ class PokedexViewModel @Inject constructor(
         return "${nameParts[0].replaceFirstChar { char -> char.uppercase() }} ${nameParts[1].uppercase()}"
     }
 
-    private fun getGenerations() {
-        viewModelScope.launch(Dispatchers.IO) {
-            toggleIsLoading(true)
-            val response = repository.getAllGenerations()
-            if (response != null) {
-                val generationNamesList = response.results.map { getGenerationDisplayName(it.name)}
-                _pokedex.update {
-                    _pokedex.value.copy(
-                        generationDetails = _pokedex.value.generationDetails.copy(
-                            allGenerations = generationNamesList
-                        )
+    private suspend fun getGenerations() {
+        val response = repository.getAllGenerations()
+        if (response != null) {
+            val generationNamesList = response.results.map { getGenerationDisplayName(it.name) }
+            _pokedex.update {
+                _pokedex.value.copy(
+                    generationDetails = _pokedex.value.generationDetails.copy(
+                        allGenerations = generationNamesList
                     )
-                }
+                )
             }
-            toggleIsLoading(false)
         }
     }
 
-    fun getAllPokemonFromGeneration(generationId: Int) {
+    fun getPokemonListFromGeneration(generationId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             toggleIsLoading(true)
-            val getGenerationResponse = getGeneration(generationId)
-            if (getGenerationResponse != null) {
+            val generationDetails = getGenerationDetails(generationId)
+            if (generationDetails != null) {
                 // NOTE: Must make additional call to get each pokemon's sprites/images url
-                if (getGenerationResponse.pokemonSpecies != null) {
-                    getAllPokemon(getGenerationResponse.pokemonSpecies)
+                if (generationDetails.pokemonSpecies != null) {
+                    setPokemonList(generationDetails.pokemonSpecies)
                 }
             }
             toggleIsLoading(false)
         }
     }
 
-    private suspend fun getGeneration(generationId: Int): Generation? {
+    private suspend fun getGenerationDetails(generationId: Int): Generation? {
         dataStoreManager.saveToDataStore(
             PokedexDetail(generationId = generationId.toString())
         )
@@ -114,12 +110,18 @@ class PokedexViewModel @Inject constructor(
         return response
     }
 
-    private suspend fun getAllPokemon(pokemonSpecies: List<NameAndUrl>) {
-        var newPokemonList = emptyList<Pokemon>()
+    private suspend fun setPokemonList(pokemonSpecies: List<NameAndUrl>) {
+        var newPokemonList = emptyList<BasicPokemon>()
         for (pokemon in pokemonSpecies) {
             val pokemon = repository.getPokemon(pokemon.name)
             if (pokemon != null) {
-                newPokemonList = newPokemonList.plus(pokemon)
+                val basicPokemon = BasicPokemon(
+                    id = pokemon.id,
+                    name = pokemon.name,
+                    displayName = pokemon.displayName,
+                    sprites = pokemon.sprites
+                )
+                newPokemonList = newPokemonList.plus(basicPokemon)
             }
         }
 
@@ -128,6 +130,21 @@ class PokedexViewModel @Inject constructor(
             _pokedex.value.copy(
                 pokemonList = orderedPokemonList
             )
+        }
+    }
+
+    fun getSelectedPokemonDetails(pokemonName: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            toggleIsLoading(true)
+            val pokemon = repository.getPokemon(pokemonName)
+            if (pokemon != null) {
+                _pokedex.update {
+                    _pokedex.value.copy(
+                        selectedPokemonDetails = pokemon
+                    )
+                }
+            }
+            toggleIsLoading(false)
         }
     }
 

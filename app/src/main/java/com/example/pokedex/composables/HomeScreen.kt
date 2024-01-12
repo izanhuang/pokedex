@@ -7,10 +7,10 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.pokedex.types.Pokemon
+import com.example.pokedex.types.BasicPokemon
 
 @Composable
-fun HomeScreen(pokemonList: List<Pokemon>, modifier: Modifier = Modifier) {
+fun HomeScreen(pokemonList: List<BasicPokemon>, modifier: Modifier = Modifier) {
     LazyVerticalGrid(
         modifier = modifier,
         columns = GridCells.Adaptive(minSize = 128.dp),
