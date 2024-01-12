@@ -27,9 +27,13 @@ fun PokedexScreen(modifier: Modifier = Modifier, viewModel: PokedexViewModel = v
         Screen.Home
     }
 
+    val isSetupCompleted =
+        !pokedex.isLoading && currentRoute != Screen.Setup.route &&
+                pokedex.generationDetails.currentGenerationId != null
+
     Scaffold(
         topBar = {
-            if (!pokedex.isLoading) {
+            if (isSetupCompleted) {
                 TopBar(
                     currentRoute = currentRoute,
                     homeScreenTitle = pokedex.generationDetails.currentGenerationDisplayName,
@@ -38,7 +42,7 @@ fun PokedexScreen(modifier: Modifier = Modifier, viewModel: PokedexViewModel = v
             }
         },
         bottomBar = {
-            if (!pokedex.isLoading) {
+            if (isSetupCompleted) {
                 BottomNavigationBar(
                     navController = navController,
                     currentRoute = currentRoute
@@ -56,6 +60,18 @@ fun PokedexScreen(modifier: Modifier = Modifier, viewModel: PokedexViewModel = v
                     viewModel.getPokemonListFromGeneration(
                         generationId
                     )
+                    navController.navigate(Screen.Home.route)
+                },
+                onResetAppClick = {
+                    viewModel.resetApp()
+                    navController.navigate(Screen.Setup.route)
+                },
+                onUpdatePokemonListClick = {
+                    pokedex.generationDetails.currentGenerationId?.let { it ->
+                        viewModel.getPokemonListFromGeneration(
+                            it
+                        )
+                    }
                 },
                 navController = navController,
                 startScreen = startScreen,

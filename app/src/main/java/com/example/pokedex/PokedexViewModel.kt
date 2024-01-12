@@ -8,6 +8,7 @@ import com.example.pokedex.prefdatastore.DataStoreManager
 import com.example.pokedex.repository.PokedexRepository
 import com.example.pokedex.types.BasicPokemon
 import com.example.pokedex.types.Generation
+import com.example.pokedex.types.GenerationViewData
 import com.example.pokedex.types.NameAndUrl
 import com.example.pokedex.types.PokedexDetail
 import com.example.pokedex.types.PokedexScreenState
@@ -143,6 +144,29 @@ class PokedexViewModel @Inject constructor(
                         selectedPokemonDetails = pokemon
                     )
                 }
+            }
+            toggleIsLoading(false)
+        }
+    }
+
+    fun clearSelectedPokemonDetails() {
+        _pokedex.update {
+            _pokedex.value.copy(
+                selectedPokemonDetails = null
+            )
+        }
+    }
+
+    fun resetApp() {
+        viewModelScope.launch(Dispatchers.IO) {
+            toggleIsLoading(true)
+            dataStoreManager.clearDataStore()
+            _pokedex.update {
+                _pokedex.value.copy(
+                    generationDetails = GenerationViewData(),
+                    pokemonList = emptyList(),
+                    selectedPokemonDetails = null,
+                )
             }
             toggleIsLoading(false)
         }

@@ -18,6 +18,8 @@ fun MyAppNavHost(
     allGenerations: List<String>,
     pokemonList: List<BasicPokemon>,
     onGenerationSelect: (Int) -> Unit,
+    onResetAppClick: () -> Unit,
+    onUpdatePokemonListClick: () -> Unit,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     startScreen: Screen = Screen.Setup,
@@ -58,6 +60,12 @@ fun MyAppNavHost(
         }
         composable(
             route = "settings"
-        ) { SettingsScreen() }
+        ) {
+            SettingsScreen(
+                onResetAppClick = onResetAppClick,
+                onUpdatePokemonListClick = onUpdatePokemonListClick,
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
+        }
     }
 }
