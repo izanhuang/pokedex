@@ -7,6 +7,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -47,11 +48,19 @@ fun BottomNavigationBar(
                         }
                     },
                     icon = {
-                        Icon(
-                            imageVector = screen.icon,
-                            contentDescription = stringResource(screen.resourceId),
-                            tint = contentColor
-                        )
+                        if (screen.iconId != null) {
+                            Icon(
+                                painterResource(screen.iconId),
+                                contentDescription = stringResource(screen.resourceId),
+                                tint = contentColor
+                            )
+                        } else {
+                            Icon(
+                                imageVector = screen.icon,
+                                contentDescription = stringResource(screen.resourceId),
+                                tint = contentColor
+                            )
+                        }
                     },
                 )
             }
