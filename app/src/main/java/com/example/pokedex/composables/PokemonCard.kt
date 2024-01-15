@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.pokedex.R
 import com.example.pokedex.types.BasicPokemon
-import com.example.pokedex.ui.theme.LightGreen
 
 @Composable
 fun PokemonCard(
@@ -38,7 +37,7 @@ fun PokemonCard(
                 .background(
                     brush = Brush.radialGradient(
                         colors = listOf(
-                            LightGreen,
+                            MaterialTheme.colorScheme.tertiary,
                             MaterialTheme.colorScheme.background
                         ),
                     )
