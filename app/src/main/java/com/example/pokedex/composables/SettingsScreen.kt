@@ -26,12 +26,12 @@ fun SettingsScreen(
                 )
         ) {
             SettingsScreenItem(
-                label = "Reset the pokedex and the pokemon generation you selected",
+                label = "Reset the pokedex and pokemon generation",
                 buttonText = "Reset",
                 onClick = onResetAppClick
             )
             SettingsScreenItem(
-                label = "Update the pokedex and retrieve the latest pokemon from the pokemon generation you selected",
+                label = "Update pokedex of selected generation",
                 buttonText = "Update",
                 onClick = onUpdatePokemonListClick,
                 isLastItem = true

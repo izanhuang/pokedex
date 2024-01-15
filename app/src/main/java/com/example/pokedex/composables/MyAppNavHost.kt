@@ -37,7 +37,7 @@ fun MyAppNavHost(
                         generationId
                     )
                 },
-                modifier = Modifier.padding(horizontal = 8.dp)
+                modifier = Modifier.padding(8.dp)
             )
         }
         composable(route = "home",

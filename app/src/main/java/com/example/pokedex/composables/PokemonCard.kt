@@ -46,7 +46,7 @@ fun PokemonCard(
             Text(
                 text = "NO. ${pokemon.id.toString()}",
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Bold
             )

@@ -64,6 +64,7 @@ class PokedexViewModel @Inject constructor(
     }
 
     private suspend fun getGenerations() {
+        toggleIsLoading(true)
         val response = repository.getAllGenerations()
         if (response != null) {
             val generationNamesList = response.results.map { getGenerationDisplayName(it.name) }
@@ -75,6 +76,7 @@ class PokedexViewModel @Inject constructor(
                 )
             }
         }
+        toggleIsLoading(false)
     }
 
     fun getPokemonListFromGeneration(generationId: Int) {
