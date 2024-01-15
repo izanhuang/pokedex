@@ -51,6 +51,9 @@ android {
 }
 
 dependencies {
+    // Status bar
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
+
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.6")
     implementation("androidx.compose.material:material:1.5.4")

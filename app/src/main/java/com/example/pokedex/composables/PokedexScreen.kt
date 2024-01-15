@@ -1,18 +1,22 @@
 package com.example.pokedex.composables
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.pokedex.PokedexViewModel
 import com.example.pokedex.types.Screen
+import com.example.pokedex.ui.theme.ClassicRed
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun PokedexScreen(modifier: Modifier = Modifier, viewModel: PokedexViewModel = viewModel()) {
@@ -30,6 +34,9 @@ fun PokedexScreen(modifier: Modifier = Modifier, viewModel: PokedexViewModel = v
     val isSetupCompleted =
         !pokedex.isLoading && currentRoute != Screen.Setup.route &&
                 pokedex.generationDetails.currentGenerationId != null
+
+    val systemUiController = rememberSystemUiController()
+    val isDarkMode = isSystemInDarkTheme()
 
     Scaffold(
         topBar = {
@@ -51,8 +58,20 @@ fun PokedexScreen(modifier: Modifier = Modifier, viewModel: PokedexViewModel = v
         }
     ) {
         if (pokedex.isLoading) {
-            Text("loading")
+            if (isDarkMode) {
+                systemUiController.setSystemBarsColor(
+                    color = Color.Black
+                )
+            } else {
+                systemUiController.setSystemBarsColor(
+                    color = ClassicRed
+                )
+            }
+            LoadingScreen(modifier = Modifier.fillMaxSize())
         } else {
+            systemUiController.setSystemBarsColor(
+                color = MaterialTheme.colorScheme.primary
+            )
             MyAppNavHost(
                 allGenerations = pokedex.generationDetails.allGenerations,
                 pokemonList = pokedex.pokemonList,
