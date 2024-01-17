@@ -27,11 +27,14 @@ fun PokemonCardDetailsBottomSheet(
     ) {
         Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
             if (selectedPokemonDetails != null) {
-                Text(selectedPokemonDetails.displayName)
-                Text("#${selectedPokemonDetails.id}")
+                Text(selectedPokemonDetails.displayName.uppercase())
                 Text("base exp: ${selectedPokemonDetails.baseExperience}")
                 Text("height: ${selectedPokemonDetails.height}")
                 Text("weight: ${selectedPokemonDetails.weight}")
+                selectedPokemonDetails.species?.let {
+                    Text(it.genus)
+                    Text(it.flavorText)
+                }
             } else {
                 Text("Information on this pokemon could not be gathered at this time")
             }

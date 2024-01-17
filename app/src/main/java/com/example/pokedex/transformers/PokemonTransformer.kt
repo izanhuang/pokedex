@@ -37,7 +37,7 @@ class PokemonTransformer {
         return "${decimalFormat.format(value / 4.536)} lbs"
     }
 
-    private fun convertPokemonSpritesFromNetworkToPokemonSprites(
+    private fun transformPokemonSpritesFromNetworkToPokemonSprites(
         pokemonSpritesFromNetwork: PokemonSpritesFromNetwork
     ): PokemonSprites {
         return PokemonSprites(
@@ -46,7 +46,7 @@ class PokemonTransformer {
         )
     }
 
-    fun convertPokemonFromNetworkToPokemon(
+    fun transformPokemonFromNetworkToPokemon(
         pokemonFromNetwork: PokemonFromNetwork?
     ): Pokemon? {
         if (pokemonFromNetwork != null) {
@@ -67,8 +67,9 @@ class PokemonTransformer {
                     height = convertFromDecimetresToFeetAndInches(height),
                     weight = convertFromHectogramToPounds(weight),
                     sprites = pokemonFromNetwork.sprites?.let {
-                       convertPokemonSpritesFromNetworkToPokemonSprites(it)
-                    }
+                        transformPokemonSpritesFromNetworkToPokemonSprites(it)
+                    },
+                    species = null,
                 )
             }
         }

@@ -29,10 +29,10 @@ import com.example.pokedex.types.BasicPokemon
 fun PokemonCard(
     pokemon: BasicPokemon,
     modifier: Modifier = Modifier,
-    onClick: (String) -> Unit,
+    onClick: (Int) -> Unit,
 ) {
     Card(
-        modifier = modifier.clickable { onClick(pokemon.name) },
+        modifier = modifier.clickable { onClick(pokemon.id) },
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondaryContainer),
     ) {

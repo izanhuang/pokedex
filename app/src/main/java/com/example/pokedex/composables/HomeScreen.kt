@@ -13,7 +13,7 @@ import com.example.pokedex.types.BasicPokemon
 @Composable
 fun HomeScreen(
     pokemonList: List<BasicPokemon>,
-    onPokemonCardClick: (String) -> Unit,
+    onPokemonCardClick: (Int) -> Unit,
     modifier: Modifier = Modifier
     ) {
     LazyVerticalGrid(

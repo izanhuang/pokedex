@@ -18,7 +18,7 @@ fun MyAppNavHost(
     allGenerations: List<String>,
     pokemonList: List<BasicPokemon>,
     onGenerationSelect: (Int) -> Unit,
-    onPokemonCardClick: (String) -> Unit,
+    onPokemonCardClick: (Int) -> Unit,
     onResetAppClick: () -> Unit,
     onUpdatePokemonListClick: () -> Unit,
     modifier: Modifier = Modifier,

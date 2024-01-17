@@ -10,7 +10,8 @@ data class Pokemon(
     val baseExperience: Int?,
     val height: String,
     val weight: String,
-    val sprites: PokemonSprites?
+    val sprites: PokemonSprites?,
+    val species: PokemonSpecies?
 )
 
 @Immutable

@@ -106,9 +106,9 @@ fun PokedexScreen(modifier: Modifier = Modifier, viewModel: PokedexViewModel = v
                     }
                     navController.navigate(Screen.Home.route)
                 },
-                onPokemonCardClick = { pokemonName ->
+                onPokemonCardClick = { pokemonId ->
                     scope.launch {
-                        viewModel.getSelectedPokemonDetails(pokemonName)
+                        viewModel.getSelectedPokemonDetails(pokemonId)
                         showBottomSheet = true
                     }
                 },

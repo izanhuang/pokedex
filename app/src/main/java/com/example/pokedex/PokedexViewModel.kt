@@ -1,7 +1,5 @@
 package com.example.pokedex
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pokedex.prefdatastore.DataStoreManager
@@ -24,18 +22,12 @@ class PokedexViewModel @Inject constructor(
 ) : ViewModel() {
     private val repository = PokedexRepository()
 
-    private val _pokedex = MutableStateFlow<PokedexScreenState>(
+    private val _pokedex = MutableStateFlow(
         PokedexScreenState(
             isLoading = true
         )
     )
     val pokedex: StateFlow<PokedexScreenState> = _pokedex
-
-    private var _eventNetworkError = MutableLiveData<Boolean>(false)
-    val eventNetworkError: LiveData<Boolean> = _eventNetworkError
-
-    private var _isNetworkErrorShown = MutableLiveData<Boolean>(false)
-    val isNetworkErrorShown: LiveData<Boolean> = _isNetworkErrorShown
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -111,16 +103,22 @@ class PokedexViewModel @Inject constructor(
         return response
     }
 
+    private fun getPokemonIdFromUrl(url: String): Int {
+        val urlPathSegments = url.split('/')
+        return urlPathSegments.get(urlPathSegments.size - 2).toInt()
+    }
+
     private suspend fun setPokemonList(pokemonSpecies: List<NameAndUrl>) {
         var newPokemonList = emptyList<BasicPokemon>()
         for (pokemon in pokemonSpecies) {
-            val pokemon = repository.getPokemon(pokemon.name)
-            if (pokemon != null) {
+            val pokemonId = getPokemonIdFromUrl(pokemon.url)
+            val maybePokemon = repository.getPokemon(pokemonId)
+            if (maybePokemon != null) {
                 val basicPokemon = BasicPokemon(
-                    id = pokemon.id,
-                    name = pokemon.name,
-                    displayName = pokemon.displayName,
-                    sprites = pokemon.sprites
+                    id = maybePokemon.id,
+                    name = maybePokemon.name,
+                    displayName = maybePokemon.displayName,
+                    sprites = maybePokemon.sprites
                 )
                 newPokemonList = newPokemonList.plus(basicPokemon)
             }
@@ -134,12 +132,13 @@ class PokedexViewModel @Inject constructor(
         }
     }
 
-    suspend fun getSelectedPokemonDetails(pokemonName: String) {
-        val pokemon = repository.getPokemon(pokemonName)
+    suspend fun getSelectedPokemonDetails(pokemonId: Int) {
+        val pokemon = repository.getPokemon(pokemonId)
+        val pokemonSpecies = repository.getPokemonSpecies(pokemonId)
         if (pokemon != null) {
             _pokedex.update {
                 _pokedex.value.copy(
-                    selectedPokemonDetails = pokemon
+                    selectedPokemonDetails = pokemon.copy(species = pokemonSpecies)
                 )
             }
         }
@@ -167,17 +166,6 @@ class PokedexViewModel @Inject constructor(
             toggleIsLoading(false)
         }
     }
-
-//    fun fetchPokemon() {
-//        viewModelScope.launch {
-//            try {
-//                val pokemon = repository.getPokemon()
-//                _pokemon.value = pokemon
-//            } catch (error: Exception) {
-//
-//            }
-//        }
-//    }
 }
 
 //class PokedexViewModelFactory(private val dataStoreManager: DataStoreManager) : ViewModelProvider.Factory {
