@@ -18,6 +18,7 @@ fun MyAppNavHost(
     allGenerations: List<String>,
     pokemonList: List<BasicPokemon>,
     onGenerationSelect: (Int) -> Unit,
+    onPokemonCardClick: (String) -> Unit,
     onResetAppClick: () -> Unit,
     onUpdatePokemonListClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -55,7 +56,9 @@ fun MyAppNavHost(
             }
         ) {
             HomeScreen(
-                pokemonList = pokemonList, modifier = Modifier.padding(horizontal = 8.dp)
+                pokemonList = pokemonList,
+                onPokemonCardClick = onPokemonCardClick,
+                modifier = Modifier.padding(horizontal = 8.dp),
             )
         }
         composable(

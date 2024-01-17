@@ -79,21 +79,19 @@ class PokedexViewModel @Inject constructor(
         toggleIsLoading(false)
     }
 
-    fun getPokemonListFromGeneration(generationId: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            toggleIsLoading(true)
-            dataStoreManager.saveToDataStore(
-                PokedexDetail(generationId = generationId.toString())
-            )
-            val generationDetails = getGenerationDetails(generationId)
-            if (generationDetails != null) {
-                // NOTE: Must make additional call to get each pokemon's sprites/images url
-                if (generationDetails.pokemonSpecies != null) {
-                    setPokemonList(generationDetails.pokemonSpecies)
-                }
+    suspend fun getPokemonListFromGeneration(generationId: Int) {
+        toggleIsLoading(true)
+        dataStoreManager.saveToDataStore(
+            PokedexDetail(generationId = generationId.toString())
+        )
+        val generationDetails = getGenerationDetails(generationId)
+        if (generationDetails != null) {
+            // NOTE: Must make additional call to get each pokemon's sprites/images url
+            if (generationDetails.pokemonSpecies != null) {
+                setPokemonList(generationDetails.pokemonSpecies)
             }
-            toggleIsLoading(false)
         }
+        toggleIsLoading(false)
     }
 
     private suspend fun getGenerationDetails(generationId: Int): Generation? {
@@ -136,18 +134,14 @@ class PokedexViewModel @Inject constructor(
         }
     }
 
-    fun getSelectedPokemonDetails(pokemonName: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            toggleIsLoading(true)
-            val pokemon = repository.getPokemon(pokemonName)
-            if (pokemon != null) {
-                _pokedex.update {
-                    _pokedex.value.copy(
-                        selectedPokemonDetails = pokemon
-                    )
-                }
+    suspend fun getSelectedPokemonDetails(pokemonName: String) {
+        val pokemon = repository.getPokemon(pokemonName)
+        if (pokemon != null) {
+            _pokedex.update {
+                _pokedex.value.copy(
+                    selectedPokemonDetails = pokemon
+                )
             }
-            toggleIsLoading(false)
         }
     }
 

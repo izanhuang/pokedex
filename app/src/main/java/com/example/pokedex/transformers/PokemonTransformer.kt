@@ -4,6 +4,7 @@ import com.example.pokedex.types.Pokemon
 import com.example.pokedex.types.PokemonFromNetwork
 import com.example.pokedex.types.PokemonSprites
 import com.example.pokedex.types.PokemonSpritesFromNetwork
+import java.text.DecimalFormat
 
 class PokemonTransformer {
     inline fun <T1 : Any, T2 : Any, T3 : Any, T4 : Any, T5 : Any, R : Any> safeLet(
@@ -21,6 +22,19 @@ class PokemonTransformer {
             p4,
             p5,
         ) else null
+    }
+
+    private val decimalFormat = DecimalFormat("#.##")
+
+    private fun convertFromDecimetresToFeetAndInches(value: Int): String {
+        val valueInFeet = decimalFormat.format(value / 3.048)
+        val separatedFeetAndInches = valueInFeet.toString().split(".")
+
+        return "${separatedFeetAndInches[0]}'${separatedFeetAndInches[1]}\""
+    }
+
+    private fun convertFromHectogramToPounds(value: Int): String {
+        return "${decimalFormat.format(value / 4.536)} lbs"
     }
 
     private fun convertPokemonSpritesFromNetworkToPokemonSprites(
@@ -50,8 +64,8 @@ class PokemonTransformer {
                     name = name,
                     displayName = displayName,
                     baseExperience = pokemonFromNetwork.base_experience,
-                    height = height,
-                    weight = weight,
+                    height = convertFromDecimetresToFeetAndInches(height),
+                    weight = convertFromHectogramToPounds(weight),
                     sprites = pokemonFromNetwork.sprites?.let {
                        convertPokemonSpritesFromNetworkToPokemonSprites(it)
                     }

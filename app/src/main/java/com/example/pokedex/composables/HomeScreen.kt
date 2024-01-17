@@ -11,7 +11,11 @@ import androidx.compose.ui.unit.dp
 import com.example.pokedex.types.BasicPokemon
 
 @Composable
-fun HomeScreen(pokemonList: List<BasicPokemon>, modifier: Modifier = Modifier) {
+fun HomeScreen(
+    pokemonList: List<BasicPokemon>,
+    onPokemonCardClick: (String) -> Unit,
+    modifier: Modifier = Modifier
+    ) {
     LazyVerticalGrid(
         modifier = modifier,
         contentPadding = PaddingValues(vertical = 8.dp),
@@ -20,7 +24,7 @@ fun HomeScreen(pokemonList: List<BasicPokemon>, modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(pokemonList) { pokemon ->
-            PokemonCard(pokemon = pokemon)
+            PokemonCard(pokemon = pokemon, onClick = onPokemonCardClick)
         }
     }
 }

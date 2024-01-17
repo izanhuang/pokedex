@@ -3,6 +3,7 @@ package com.example.pokedex.composables
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -27,10 +28,11 @@ import com.example.pokedex.types.BasicPokemon
 @Composable
 fun PokemonCard(
     pokemon: BasicPokemon,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: (String) -> Unit,
 ) {
     Card(
-        modifier = modifier,
+        modifier = modifier.clickable { onClick(pokemon.name) },
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondaryContainer),
     ) {
@@ -47,7 +49,7 @@ fun PokemonCard(
                 ),
         ) {
             Text(
-                text = "NO. ${pokemon.id.toString()}",
+                text = "NO. ${pokemon.id}",
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -55,7 +57,6 @@ fun PokemonCard(
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Bold
             )
-            // TODO: Handle case where sprite is null or there is no image url
             if (pokemon.sprites?.frontDefault != null) {
                 AsyncImage(
                     model =
@@ -77,17 +78,15 @@ fun PokemonCard(
 
                 )
             }
-            pokemon.displayName?.let {
-                Text(
-                    text = it.uppercase(),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
+            Text(
+                text = pokemon.displayName.uppercase(),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
         }
     }
 }
