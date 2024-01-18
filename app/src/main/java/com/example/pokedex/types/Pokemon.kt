@@ -1,6 +1,7 @@
 package com.example.pokedex.types
 
 import androidx.compose.runtime.Immutable
+import com.google.gson.annotations.SerializedName
 
 @Immutable
 data class Pokemon(
@@ -26,6 +27,8 @@ data class BasicPokemon(
 data class PokemonSprites(
     val backDefault: String?,
     val frontDefault: String?,
+    val officialArtworkFrontDefault: String?,
+    val officialArtworkFrontShiny: String?
 )
 
 data class PokemonFromNetwork(
@@ -45,5 +48,16 @@ data class PokemonSpritesFromNetwork(
     val front_default: String?,
     val front_female: String?,
     val front_shiny: String?,
-    val front_shiny_female: String?
+    val front_shiny_female: String?,
+    val other: PokemonSpritesOther?
+)
+
+data class PokemonSpritesOther(
+    @SerializedName("official-artwork")
+    val officialArtwork: PokemonSpritesOfficialArtwork
+)
+
+data class PokemonSpritesOfficialArtwork(
+    val front_default: String?,
+    val front_shiny: String?
 )

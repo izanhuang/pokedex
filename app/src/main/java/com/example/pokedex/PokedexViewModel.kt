@@ -105,7 +105,7 @@ class PokedexViewModel @Inject constructor(
 
     private fun getPokemonIdFromUrl(url: String): Int {
         val urlPathSegments = url.split('/')
-        return urlPathSegments.get(urlPathSegments.size - 2).toInt()
+        return urlPathSegments[urlPathSegments.size - 2].toInt()
     }
 
     private suspend fun setPokemonList(pokemonSpecies: List<NameAndUrl>) {

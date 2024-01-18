@@ -42,7 +42,9 @@ class PokemonTransformer {
     ): PokemonSprites {
         return PokemonSprites(
             backDefault = pokemonSpritesFromNetwork.back_default,
-            frontDefault = pokemonSpritesFromNetwork.front_default
+            frontDefault = pokemonSpritesFromNetwork.front_default,
+            officialArtworkFrontDefault = pokemonSpritesFromNetwork.other?.officialArtwork?.front_default,
+            officialArtworkFrontShiny = pokemonSpritesFromNetwork.other?.officialArtwork?.front_shiny
         )
     }
 
