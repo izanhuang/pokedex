@@ -41,10 +41,10 @@ class PokemonTransformer {
         pokemonSpritesFromNetwork: PokemonSpritesFromNetwork
     ): PokemonSprites {
         return PokemonSprites(
-            backDefault = pokemonSpritesFromNetwork.back_default,
-            frontDefault = pokemonSpritesFromNetwork.front_default,
-            officialArtworkFrontDefault = pokemonSpritesFromNetwork.other?.officialArtwork?.front_default,
-            officialArtworkFrontShiny = pokemonSpritesFromNetwork.other?.officialArtwork?.front_shiny
+            backDefault = pokemonSpritesFromNetwork.backDefault,
+            frontDefault = pokemonSpritesFromNetwork.frontDefault,
+            officialArtworkFrontDefault = pokemonSpritesFromNetwork.other?.officialArtwork?.frontDefault,
+            officialArtworkFrontShiny = pokemonSpritesFromNetwork.other?.officialArtwork?.frontShiny
         )
     }
 
@@ -65,7 +65,7 @@ class PokemonTransformer {
                     id = id,
                     name = name,
                     displayName = displayName,
-                    baseExperience = pokemonFromNetwork.base_experience,
+                    baseExperience = pokemonFromNetwork.baseExperience,
                     height = convertFromDecimetresToFeetAndInches(height),
                     weight = convertFromHectogramToPounds(weight),
                     sprites = pokemonFromNetwork.sprites?.let {

@@ -1,6 +1,5 @@
 package com.example.pokedex.repository
 
-import com.example.pokedex.transformers.GenerationTransformer
 import com.example.pokedex.network.RetrofitInstance
 import com.example.pokedex.transformers.PokemonSpeciesTransformer
 import com.example.pokedex.transformers.PokemonTransformer
@@ -20,8 +19,7 @@ class PokedexRepository() {
     }
 
     suspend fun getGeneration(id: Int): Generation? {
-        val generationFromNetwork = pokedexService.getGeneration(id).body()
-        return GenerationTransformer().transformGenerationFromNetworkToGeneration(generationFromNetwork)
+        return pokedexService.getGeneration(id).body()
     }
 
     suspend fun getPokemon(id: Int): Pokemon? {

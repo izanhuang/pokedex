@@ -12,14 +12,14 @@ class PokemonSpeciesTransformer {
         val maybeGenusInEnglish = pokemonSpeciesFromNetwork?.genera?.find {
             it.language.name == "en"
         }
-        val maybeFlavorTextInEnglish = pokemonSpeciesFromNetwork?.flavor_text_entries?.find {
+        val maybeFlavorTextInEnglish = pokemonSpeciesFromNetwork?.flavorTextEntries?.find {
             it.language.name == "en" && it.version.name == "emerald"
         }
 
         if (maybeGenusInEnglish != null && maybeFlavorTextInEnglish != null) {
             return PokemonSpecies(
                 genus = maybeGenusInEnglish.genus,
-                flavorText = removeCharacterEscapeSequences(maybeFlavorTextInEnglish.flavor_text),
+                flavorText = removeCharacterEscapeSequences(maybeFlavorTextInEnglish.flavorText),
             )
         }
 

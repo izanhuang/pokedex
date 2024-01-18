@@ -34,21 +34,18 @@ data class PokemonSprites(
 data class PokemonFromNetwork(
     val id: Int?,
     val name: String?,
-    val base_experience: Int?,
+    @SerializedName("base_experience")
+    val baseExperience: Int?,
     val height: Int?,
     val weight: Int?,
     val sprites: PokemonSpritesFromNetwork?
 )
 
 data class PokemonSpritesFromNetwork(
-    val back_default: String?,
-    val back_female: String?,
-    val back_shiny: String?,
-    val back_shiny_female: String?,
-    val front_default: String?,
-    val front_female: String?,
-    val front_shiny: String?,
-    val front_shiny_female: String?,
+    @SerializedName("back_default")
+    val backDefault: String?,
+    @SerializedName("front_default")
+    val frontDefault: String?,
     val other: PokemonSpritesOther?
 )
 
@@ -58,6 +55,8 @@ data class PokemonSpritesOther(
 )
 
 data class PokemonSpritesOfficialArtwork(
-    val front_default: String?,
-    val front_shiny: String?
+    @SerializedName("front_default")
+    val frontDefault: String?,
+    @SerializedName("front_shiny")
+    val frontShiny: String?
 )

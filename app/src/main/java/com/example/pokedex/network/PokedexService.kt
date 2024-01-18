@@ -1,6 +1,6 @@
 package com.example.pokedex.network
 
-import com.example.pokedex.types.GenerationFromNetwork
+import com.example.pokedex.types.Generation
 import com.example.pokedex.types.GenerationList
 import com.example.pokedex.types.PokemonFromNetwork
 import com.example.pokedex.types.PokemonSpeciesFromNetwork
@@ -16,7 +16,7 @@ interface PokedexService {
     suspend fun getAllGenerations(): Response<GenerationList>
 
     @GET("generation/{id}")
-    suspend fun getGeneration(@Path("id") id: Int): Response<GenerationFromNetwork>
+    suspend fun getGeneration(@Path("id") id: Int): Response<Generation>
 
     @GET("pokemon/{id}")
     suspend fun getPokemon(@Path("id") id: Int): Response<PokemonFromNetwork>
