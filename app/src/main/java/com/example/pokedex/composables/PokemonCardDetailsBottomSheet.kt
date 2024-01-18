@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -32,6 +34,8 @@ fun PokemonCardDetailsBottomSheet(
     onOutsideClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val scrollState = rememberScrollState()
+
     ModalBottomSheet(
         onDismissRequest = onOutsideClick,
         sheetState = sheetState,
@@ -41,6 +45,7 @@ fun PokemonCardDetailsBottomSheet(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
+                .verticalScroll(scrollState)
         ) {
             if (selectedPokemonDetails != null) {
                 Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -52,37 +57,37 @@ fun PokemonCardDetailsBottomSheet(
                     PokemonSprite(
                         imageUrl = selectedPokemonDetails.sprites?.officialArtworkFrontDefault,
                         modifier = Modifier
-                            .size(300.dp)
+                            .size(352.dp)
                             .align(Alignment.CenterHorizontally)
                             .fillMaxWidth()
-                            .graphicsLayer { clip = true; shape = RoundedCornerShape(50.dp)  }
+                            .graphicsLayer { clip = true; shape = RoundedCornerShape(50.dp) }
                             .drawBehind {
                                 val borderSize = 4.dp.toPx()
-                                val topLeftCornerOffset = 0f + borderSize / 2
-                                val bottomRightCornerXOffset = size.width - borderSize / 2
-                                val bottomRightCornerYOffset = size.height - borderSize / 2
+                                val baseInset = 0f + borderSize / 2
+                                val heightInset = size.height - borderSize / 2
+                                val widthInset = size.width - borderSize / 2
                                 drawLine(
                                     color = Red40,
-                                    start = Offset(topLeftCornerOffset, 0f),
-                                    end = Offset(topLeftCornerOffset, size.height / 5),
+                                    start = Offset(baseInset, 0f),
+                                    end = Offset(baseInset, size.height / 5),
                                     strokeWidth = borderSize
                                 )
                                 drawLine(
                                     color = Red40,
-                                    start = Offset(0f, topLeftCornerOffset),
-                                    end = Offset(size.width / 5, topLeftCornerOffset),
+                                    start = Offset(0f, baseInset),
+                                    end = Offset(size.width / 5, baseInset),
                                     strokeWidth = borderSize
                                 )
                                 drawLine(
                                     color = Red40,
-                                    start = Offset(bottomRightCornerXOffset, size.height),
-                                    end = Offset(bottomRightCornerXOffset, size.height - size.height / 5),
+                                    start = Offset(widthInset, size.height),
+                                    end = Offset(widthInset, size.height - size.height / 5),
                                     strokeWidth = borderSize
                                 )
                                 drawLine(
                                     color = Red40,
-                                    start = Offset(size.width, bottomRightCornerYOffset),
-                                    end = Offset(size.width - (size.width / 5), bottomRightCornerYOffset),
+                                    start = Offset(size.width, heightInset),
+                                    end = Offset(size.width - (size.width / 5), heightInset),
                                     strokeWidth = borderSize
                                 )
                             }
@@ -91,15 +96,17 @@ fun PokemonCardDetailsBottomSheet(
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         modifier = Modifier.padding(horizontal = 16.dp)
                     ) {
-                        Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
-                            Text(
-                                text = "BASE XP",
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                            Text(
-                                text = "${selectedPokemonDetails.baseExperience}",
-                                style = MaterialTheme.typography.bodyMedium,
-                            )
+                        selectedPokemonDetails.baseExperience?.let {
+                            Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
+                                Text(
+                                    text = "BASE XP",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                                Text(
+                                    text = "$it",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                )
+                            }
                         }
                         Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
                             Text(
