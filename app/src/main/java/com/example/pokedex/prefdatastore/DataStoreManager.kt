@@ -28,7 +28,7 @@ class DataStoreManager @Inject constructor(private val context: Context) {
 
     fun getFromDataStore() = context.dataStore.data.map {
         PokedexDetail(
-            generationId = it[GENERATION_ID]?:""
+            generationId = it[GENERATION_ID] ?: ""
         )
     }
 
